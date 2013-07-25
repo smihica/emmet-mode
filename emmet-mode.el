@@ -3337,8 +3337,9 @@ tbl))
             (replace-regexp-in-string "\n" (concat "\n" first-col)
                                       (replace-regexp-in-string "    " tab markup)))))
 
+
 (defun emmet-transform (input)
-  (if (eql major-mode 'css-mode)
+  (if (memq major-mode '(css-mode scss-mode sass-mode))
       (emmet-css-transform input)
     (emmet-html-transform input)))
 
