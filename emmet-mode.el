@@ -3712,7 +3712,7 @@ See also `emmet-expand-line'."
   (let ((intag t)    (instring nil)
         (last-c nil) (c nil)
         (rti 0))
-    (loop for i to (1- (length str)) do
+    (or (loop for i to (1- (length str)) do
           (setq last-c c)
           (setq c (elt str i))
           (case c
@@ -3724,7 +3724,7 @@ See also `emmet-expand-line'."
                               (return i)))))
             (?>  (if (not instring)
                      (if intag
-                         (if (= last-c ?/) (return (1+ i))
+                         (if (and (not (= last-c ?/)) (= ?< (elt str (1+ i)))) (return (1+ i))
                            (progn (setq intag nil)
                                   (setq rti (1+ i))))
                        (return i)))) ;; error?
@@ -3738,7 +3738,8 @@ See also `emmet-expand-line'."
              (if (memq c '(?\t ?\n ?\r ?\s))
                  (progn (setq c last-c))
                (if (and (not intag) (not instring))
-                   (return rti))))))))
+                   (return rti))))))
+    (length str))))
 
 (defvar emmet-flash-ovl nil)
 (make-variable-buffer-local 'emmet-flash-ovl)
