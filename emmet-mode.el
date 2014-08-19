@@ -3735,10 +3735,12 @@ See also `emmet-expand-line'."
                           (= last-c ?<))
                      (return rti)))
             (t
-             (if (memq c '(?\t ?\n ?\r ?\s))
-                 (progn (setq c last-c))
-               (if (and (not intag) (not instring))
-                   (return rti))))))
+             (if (string-match "[^<]" (string c))
+                 (setq rti (1+ i))
+               (if (memq c '(?\t ?\n ?\r ?\s))
+                   (progn (setq c last-c))
+                 (if (and (not intag) (not instring))
+                     (return rti)))))))
     (length str))))
 
 (defvar emmet-flash-ovl nil)
