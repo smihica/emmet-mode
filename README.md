@@ -283,12 +283,16 @@ you'll transform your snippet into the appropriate tag structure.
 #### Properties
 
     b[x]                     <b x=""></b>
+    b[x.]                    <b x></b>
     b[x=]                    <b x=""></b>
     b[x=""]                  <b x=""></b>
     b[x=y]                   <b x="y"></b>
     b[x="y"]                 <b x="y"></b>
     b[x="()"]                <b x="()"></b>
     b[x m]                   <b x="" m=""></b>
+    b[x. m]                  <b x m=""></b>
+    b[x m.]                  <b x="" m></b>
+    b[x. m.]                 <b x m></b>
     b[x= m=""]               <b x="" m=""></b>
     b[x=y m=l]               <b x="y" m="l"></b>
     b/[x=y m=l]              <b x="y" m="l"/>
