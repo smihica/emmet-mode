@@ -565,14 +565,3 @@ Traverse between important code points in HTML.
 - `<C-M-right>` is "Next Edit Point" (`M-x emmet-next-edit-point`)
 
 For further information and demo see [Emmet's documentation](http://docs.emmet.io/actions/go-to-edit-point/).
-
-## Development Notes
-
-When working on emmet-mode, DO NOT directly edit `emmet-mode.el`.  It is generated from the files in the `/src` directory by `make`.  When making changes, make them to the relevant source file, then run:
-
-```sh
-make clean
-make
-```
-
-in the root directory of your emmet-mode repository.
