@@ -1,6 +1,6 @@
 DST=emmet-mode.el
 
-all:	emmet-mode.el emmet-mode.elc
+all: emmet-mode.el emmet-mode.elc
 
 emmet-mode.el: src/snippets.el src/preferences.el src/*
 	rm -f $(DST)
@@ -28,7 +28,7 @@ src/preferences.el: conf/preferences.json
 clean:
 	rm -f emmet-mode.elc emmet-mode.el src/snippets.el src/preferences.el
 
-test:
+test: emmet-mode.el
 	/usr/bin/env emacs --quick --script src/test.el
 
 docs:
