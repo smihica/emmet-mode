@@ -251,9 +251,12 @@
    (emmet-run
     emmet-name
     (let ((name (cdr expr)))
-      (emmet-pif (emmet-prop-value name input)
-                     it
-                     `((,(read name) "") . ,input))))))
+      (emmet-pif (emmet-parse "\\.\\(.*?\\)" 2 "."
+                              `((,(read name)) . ,input))
+                 it
+                 (emmet-pif (emmet-prop-value name input)
+                            it
+                            `((,(read name) "") . ,input)))))))
 
 (defun emmet-prop-value (name input)
   (emmet-pif (emmet-parse "=\"\\(.*?\\)\"" 2
@@ -561,15 +564,18 @@
                           (emmet-mapconcat-or-empty
                            " " merged-tag-props " " nil
                            (lambda (prop)
-                             (let ((key (car prop)))
-                               (concat (if (symbolp key) (symbol-name key) key)
-                                       "=\"" (cadr prop) "\""))))))
+                             (let* ((key (car prop))
+                                    (key (if (symbolp key) (symbol-name key) key))
+                                    (value (cadr prop)))
+                               (if value
+                                   (concat key "=\"" value "\"")
+                                 key))))))
           (content-multiline? (and content (string-match "\n" content)))
           (block-tag?         (and settings (gethash "block" settings)))
           (self-closing?      (and (not (or tag-txt content))
                                    (or (not tag-has-body?)
                                        (and settings (gethash "selfClosing" settings)))))
-	  (block-indentation? (or content-multiline? (and block-tag? content)))
+          (block-indentation? (or content-multiline? (and block-tag? content)))
           (lf                 (if block-indentation? "\n")))
      (concat "<" tag-name id classes props
              (if self-closing?

@@ -278,12 +278,16 @@
 
 (define-emmet-transform-html-test-case Properties
   "a[x]"                    ("<a href=\"\" x=\"\"></a>")
+  "a[x.]"                   ("<a href=\"\" x></a>")
   "a[x=]"                   ("<a href=\"\" x=\"\"></a>")
   "a[x=\"\"]"               ("<a href=\"\" x=\"\"></a>")
   "a[x=y]"                  ("<a href=\"\" x=\"y\"></a>")
   "a[x=\"y\"]"              ("<a href=\"\" x=\"y\"></a>")
   "a[x=\"()\"]"             ("<a href=\"\" x=\"()\"></a>")
   "a[x m]"                  ("<a href=\"\" x=\"\" m=\"\"></a>")
+  "a[x. m]"                 ("<a href=\"\" x m=\"\"></a>")
+  "a[x m.]"                 ("<a href=\"\" x=\"\" m></a>")
+  "a[x. m.]"                ("<a href=\"\" x m></a>")
   "a[x= m=\"\"]"            ("<a href=\"\" x=\"\" m=\"\"></a>")
   "a[x=y m=l]"              ("<a href=\"\" x=\"y\" m=\"l\"></a>")
   "a/[x=y m=l]"             ("<a href=\"\" x=\"y\" m=\"l\"/>")
