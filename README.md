@@ -75,6 +75,7 @@ If you want to customize Self-closing tags style:
 ### 4. JSX Support
 If current major-mode is in `emmet-jsx-major-modes`, then JSX features will be supported:
 - Expand `.class` to `className="..."` instead of `class="..."`
+- Expand value of properties as variables: `div[value={v}]` -> `<div value={v}></div>`
 
 To enable the JSX support, add your major-mode to `emmet-jsx-major-modes`:
 

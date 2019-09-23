@@ -96,6 +96,9 @@
     (maphash #'(lambda (k v) (setq vs (cons v vs))) hash)
     vs))
 
+(defun emmet-jsx-prop-value-var? (prop-value)
+  (string-match "{.+}" prop-value))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generic parsing macros and utilities
 
@@ -3328,11 +3331,23 @@ tbl))
                                 (input (elt it 2)))
                             `((,(read name) ,(emmet-split-numbering-expressions value)) . ,input)))
              it
-             (emmet-parse "=\\([^\\,\\+\\>\\{\\}\\ )]*\\)" 2
-                          "=property value"
-                          (let ((value (elt it 1))
-                                (input (elt it 2)))
-                            `((,(read name) ,(emmet-split-numbering-expressions value)) . ,input)))))
+             (let ((emmet--prop-value-parse-any (lambda () (emmet-parse "=\\([^\\,\\+\\>\\{\\}\\ )]*\\)" 2
+                                                                         "=property value"
+                                                                         (let ((value (elt it 1))
+                                                                               (input (elt it 2)))
+                                                                           `((,(read name) ,(emmet-split-numbering-expressions value)) . ,input))))))
+               (if (memq major-mode emmet-jsx-major-modes)
+                   (emmet-pif
+                    (emmet-parse "=\\({.*?}\\)" 2
+                                 "=\"property value\""
+                                 (let ((value (elt it 1))
+                                       (input (elt it 2)))
+                                   `((,(read name) ,(emmet-split-numbering-expressions value)) . ,input)))
+                    it
+                    (funcall emmet--prop-value-parse-any))
+                 (funcall emmet--prop-value-parse-any))
+               )
+             ))
 
 (defun emmet-tag-classes (tag input)
   (let ((tag-data (cadr tag)))
@@ -3624,9 +3639,13 @@ tbl))
                           (emmet-mapconcat-or-empty
                            " " merged-tag-props " " nil
                            (lambda (prop)
-                             (let ((key (car prop)))
-                               (concat (if (symbolp key) (symbol-name key) key)
-                                       "=\"" (cadr prop) "\""))))))
+                             (let* ((key (car prop))
+                                   (val (cadr prop))
+                                   (format-string (if
+                                                      (and (memq major-mode emmet-jsx-major-modes) (emmet-jsx-prop-value-var? val)) "%s=%s"
+                                                    "%s=\"%s\"")))
+                               (format format-string (if (symbolp key) (symbol-name key) key) val)
+                               )))))
           (content-multiline? (and content (string-match "\n" content)))
           (block-tag?         (and settings (gethash "block" settings)))
           (self-closing?      (and (not (or tag-txt content))

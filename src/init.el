@@ -31,6 +31,9 @@
     (maphash #'(lambda (k v) (setq vs (cons v vs))) hash)
     vs))
 
+(defun emmet-jsx-prop-value-var? (prop-value)
+  (string-match "{.+}" prop-value))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Generic parsing macros and utilities
 

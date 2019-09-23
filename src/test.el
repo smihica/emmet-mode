@@ -706,6 +706,23 @@
   #'emmet-jsx-expand-className-test
   '(((".jsx>ul.lis>li.itm{x}*2") . "<div className=\"jsx\">\n  <ul className=\"lis\">\n    <li className=\"itm\">x</li>\n    <li className=\"itm\">x</li>\n  </ul>\n</div>")))
 
+(defun emmet-jsx-expand-prop-value-var-test (lis)
+  (let ((es (car lis))
+        (indent-tabs-mode nil)
+        (tab-width 2)
+        (standard-indent 2)
+        (emmet-jsx-major-modes '(sgml-mode)))
+    (with-temp-buffer
+      (emmet-mode 1)
+      (sgml-mode)
+      (insert es)
+      (emmet-expand-line nil)
+      (buffer-string))))
+
+(emmet-run-test-case "JSX expand prop value variable 1"
+                     #'emmet-jsx-expand-prop-value-var-test
+                     '((("div[value={v}]") . "<div value={v}></div>")))
+
 (defun emmet-self-closing-tag-style-test (lis)
   (let ((es (car lis))
         (emmet-preview-default nil))
