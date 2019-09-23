@@ -98,6 +98,10 @@ e. g. without semicolons")
   "File local filter used by `emmet-default-filter'.")
 (make-variable-buffer-local 'emmet-file-filter)
 
+(defvar emmet-jsx-major-modes
+  '(rjsx-mode
+    typescript-tsx-mode))
+
 (defun emmet-transform (input)
   (if (or (emmet-detect-style-tag-and-attr) emmet-use-css-transform)
       (emmet-css-transform input)

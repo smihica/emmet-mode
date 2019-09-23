@@ -685,12 +685,12 @@
 (define-emmet-transform-html-test-case regression-61-bracket-escapes
   "div{\\}\\}\\}}" ("<div>}}}</div>"))
 
-(defun emmet-expand-jsx-className?-test (lis)
+(defun emmet-jsx-expand-className-test (lis)
   (let ((es (car lis))
         (indent-tabs-mode nil)
         (tab-width 2)
         (standard-indent 2)
-        (emmet-expand-jsx-className? t))
+        (emmet-jsx-major-modes '(sgml-mode)))
     (with-temp-buffer
       (emmet-mode 1)
       (sgml-mode)
@@ -699,11 +699,11 @@
       (buffer-string))))
 
 (emmet-run-test-case "JSX's className 1"
-  #'emmet-expand-jsx-className?-test
+  #'emmet-jsx-expand-className-test
   '(((".jsx") . "<div className=\"jsx\"></div>")))
 
 (emmet-run-test-case "JSX's className 2"
-  #'emmet-expand-jsx-className?-test
+  #'emmet-jsx-expand-className-test
   '(((".jsx>ul.lis>li.itm{x}*2") . "<div className=\"jsx\">\n  <ul className=\"lis\">\n    <li className=\"itm\">x</li>\n    <li className=\"itm\">x</li>\n  </ul>\n</div>")))
 
 (defun emmet-self-closing-tag-style-test (lis)
