@@ -3074,7 +3074,7 @@ tbl))
 
 (defun emmet-expr (input)
   "Parse a zen coding expression with optional filters."
-  (emmet-pif (emmet-parse "\\(.*?\\)|" 2 "expr|filter" it)
+  (emmet-pif (emmet-extract-expr-filters input)
                  (let ((input (elt it 1))
                        (filters (elt it 2)))
                    (emmet-pif (emmet-extract-filters filters)
@@ -3097,6 +3097,18 @@ tbl))
                                                                              (emmet-run emmet-tag
                                                                                             it
                                                                                             '(error "no match, expecting ( or a-zA-Z0-9"))))))))
+
+(defun emmet-extract-expr-filters (input)
+  (cl-flet ((string-match-reverse (str regexp)
+                                  (emmet-aif (string-match regexp (reverse str)) (- (length str) 1 it))))
+    (let ((err '(error "expected expr|filter")))
+      (emmet-aif (string-match-reverse input "|")
+                 (if (string-match "[\"}]" (substring input (+ it 1)))
+                     err
+                     `(,input
+                       ,(substring input 0 it)
+                       ,(substring input (+ it 1))))
+                 err))))
 
 (defun emmet-extract-filters (input)
   "Extract filters from expression."
