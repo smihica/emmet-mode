@@ -244,13 +244,6 @@ e. g. without semicolons")
     less-css-mode)
   "Major modes that use emmet for CSS, rather than HTML.")
 
-(defvar emmet-fallback-filter '("html")
-  "Fallback filter for `emmet-default-filter', if none is found.")
-
-(defvar emmet-file-filter nil
-  "File local filter used by `emmet-default-filter'.")
-(make-variable-buffer-local 'emmet-file-filter)
-
 (defun emmet-transform (input)
   (if (or (emmet-detect-style-tag-and-attr) emmet-use-css-transform)
       (emmet-css-transform input)
@@ -796,7 +789,7 @@ See `emmet-preview-online'."
 (puthash "bdb" "border-bottom:|;" tbl)
 (puthash "bdb+" "border-bottom:${1:1px} ${2:solid} ${3:#000};" tbl)
 (puthash "bdb:n" "border-bottom:none;" tbl)
-(puthash "bdbc" "border-bottom-color:#${1:000};" tbl)
+(puthash "bdbc" "border-bottom-color:${1:#000};" tbl)
 (puthash "bdbc:t" "border-bottom-color:transparent;" tbl)
 (puthash "bdbi" "border-bottom-image:url(|);" tbl)
 (puthash "bdbi:n" "border-bottom-image:none;" tbl)
@@ -813,7 +806,7 @@ See `emmet-preview-online'."
 (puthash "bdbs" "border-bottom-style:|;" tbl)
 (puthash "bdbs:n" "border-bottom-style:none;" tbl)
 (puthash "bdbw" "border-bottom-width:|;" tbl)
-(puthash "bdc" "border-color:#${1:000};" tbl)
+(puthash "bdc" "border-color:${1:#000};" tbl)
 (puthash "bdc:t" "border-color:transparent;" tbl)
 (puthash "bdci" "border-corner-image:url(|);" tbl)
 (puthash "bdci:c" "border-corner-image:continue;" tbl)
@@ -834,7 +827,7 @@ See `emmet-preview-online'."
 (puthash "bdl" "border-left:|;" tbl)
 (puthash "bdl+" "border-left:${1:1px} ${2:solid} ${3:#000};" tbl)
 (puthash "bdl:n" "border-left:none;" tbl)
-(puthash "bdlc" "border-left-color:#${1:000};" tbl)
+(puthash "bdlc" "border-left-color:${1:#000};" tbl)
 (puthash "bdlc:t" "border-left-color:transparent;" tbl)
 (puthash "bdlen" "border-length:|;" tbl)
 (puthash "bdlen:a" "border-length:auto;" tbl)
@@ -846,7 +839,7 @@ See `emmet-preview-online'."
 (puthash "bdr" "border-right:|;" tbl)
 (puthash "bdr+" "border-right:${1:1px} ${2:solid} ${3:#000};" tbl)
 (puthash "bdr:n" "border-right:none;" tbl)
-(puthash "bdrc" "border-right-color:#${1:000};" tbl)
+(puthash "bdrc" "border-right-color:${1:#000};" tbl)
 (puthash "bdrc:t" "border-right-color:transparent;" tbl)
 (puthash "bdri" "border-right-image:url(|);" tbl)
 (puthash "bdri:n" "border-right-image:none;" tbl)
@@ -872,7 +865,7 @@ See `emmet-preview-online'."
 (puthash "bdt" "border-top:|;" tbl)
 (puthash "bdt+" "border-top:${1:1px} ${2:solid} ${3:#000};" tbl)
 (puthash "bdt:n" "border-top:none;" tbl)
-(puthash "bdtc" "border-top-color:#${1:000};" tbl)
+(puthash "bdtc" "border-top-color:${1:#000};" tbl)
 (puthash "bdtc:t" "border-top-color:transparent;" tbl)
 (puthash "bdti" "border-top-image:url(|);" tbl)
 (puthash "bdti:n" "border-top-image:none;" tbl)
@@ -902,7 +895,7 @@ See `emmet-preview-online'."
 (puthash "bgbk:bb" "background-break:bounding-box;" tbl)
 (puthash "bgbk:c" "background-break:continuous;" tbl)
 (puthash "bgbk:eb" "background-break:each-box;" tbl)
-(puthash "bgc" "background-color:#${1:fff};" tbl)
+(puthash "bgc" "background-color:${1:fff};" tbl)
 (puthash "bgc:t" "background-color:transparent;" tbl)
 (puthash "bgcp" "background-clip:${1:padding-box};" tbl)
 (puthash "bgcp:bb" "background-clip:border-box;" tbl)
@@ -938,7 +931,7 @@ See `emmet-preview-online'."
 (puthash "bxz" "box-sizing:${1:border-box};" tbl)
 (puthash "bxz:bb" "box-sizing:border-box;" tbl)
 (puthash "bxz:cb" "box-sizing:content-box;" tbl)
-(puthash "c" "color:#${1:000};" tbl)
+(puthash "c" "color:${1:#000};" tbl)
 (puthash "c:r" "color:rgb(${1:0}, ${2:0}, ${3:0});" tbl)
 (puthash "c:ra" "color:rgba(${1:0}, ${2:0}, ${3:0}, .${4:5});" tbl)
 (puthash "cl" "clear:${1:both};" tbl)
@@ -1051,7 +1044,7 @@ See `emmet-preview-online'."
 (puthash "fl:l" "float:left;" tbl)
 (puthash "fl:n" "float:none;" tbl)
 (puthash "fl:r" "float:right;" tbl)
-(puthash "fs" "font-style:${italic};" tbl)
+(puthash "fs" "font-style:italic;" tbl)
 (puthash "fs:i" "font-style:italic;" tbl)
 (puthash "fs:n" "font-style:normal;" tbl)
 (puthash "fs:o" "font-style:oblique;" tbl)
@@ -1143,7 +1136,7 @@ See `emmet-preview-online'."
 (puthash "mt:a" "margin-top:auto;" tbl)
 (puthash "ol" "outline:|;" tbl)
 (puthash "ol:n" "outline:none;" tbl)
-(puthash "olc" "outline-color:#${1:000};" tbl)
+(puthash "olc" "outline-color:${1:#000};" tbl)
 (puthash "olc:i" "outline-color:invert;" tbl)
 (puthash "olo" "outline-offset:|;" tbl)
 (puthash "ols" "outline-style:|;" tbl)
@@ -3111,18 +3104,16 @@ tbl))
 
 (defun emmet-default-filter ()
   "Default filter(s) to be used if none is specified."
-  (or emmet-file-filter
-      (let* ((file-ext (car (emmet-regex ".*\\(\\..*\\)" (or (buffer-file-name) "") 1)))
-             (defaults '(".html" ("html")
-                         ".htm"  ("html")
-                         ".haml" ("haml")
-                         ".clj"  ("hic")
-                         ".cljs" ("hic")))
-             (default-else emmet-fallback-filter)
-             (selected-default (member file-ext defaults)))
-        (if selected-default
-            (cadr selected-default)
-          default-else))))
+  (let* ((file-ext (car (emmet-regex ".*\\(\\..*\\)" (or (buffer-file-name) "") 1)))
+         (defaults '(".html" ("html")
+                     ".htm"  ("html")
+                     ".haml" ("haml")
+                     ".clj"  ("hic")))
+         (default-else      '("html"))
+         (selected-default (member file-ext defaults)))
+    (if selected-default
+        (cadr selected-default)
+      default-else)))
 
 (defun emmet-numbering (input)
   (emmet-parse
@@ -4116,7 +4107,7 @@ tbl))
   (emmet-join-string
    (mapcar
     #'(lambda (expr)
-        (let*
+        (let* 
 	    ((hash-map (if emmet-use-sass-syntax emmet-sass-snippets emmet-css-snippets))
 	     (basement
 	      (emmet-aif
