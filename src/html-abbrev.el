@@ -43,6 +43,7 @@
 
 (defun emmet-extract-inner-text (input)
   "Extract inner-text in the form of {inner_text}...
+Right curly braces can be escaped by backslash, i.e. '\\}'
 Return `(,inner-text ,input-without-inner-text) if succeeds, otherwise return
 `(error ,error-message)"
   (cl-labels (
