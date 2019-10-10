@@ -3108,6 +3108,31 @@ tbl))
                                   it))
                  (emmet-parse "\\([^\\|]+\\)" 1 "filter name" `(,(elt it 1)))))
 
+(defun emmet-extract-inner-text (input)
+  "Extract inner-text in the form of {inner_text}...
+Return `(,inner-text ,input-without-inner-text) if succeeds, otherwise return
+`(error ,error-message)"
+  (cl-labels (
+            (string-find-paired-right-curly-brace
+               (str)
+               (cl-labels ((char-at-pos (str pos) (string-to-char (substring str pos)))
+                           (helper (str pos cnt)
+                                   (let ((len (length str)))
+                                     (if (>= pos len) nil
+                                       (let ((c (char-at-pos str pos)))
+                                         (cond ((char-equal c ?{) (setq cnt (+ cnt 1)))
+                                               ((and (char-equal c ?}) (not (char-equal (char-at-pos str (- pos 1)) ?\\))) (setq cnt (- cnt 1))))
+                                         (if (= cnt 0) pos (helper str (+ pos 1) cnt)))))
+                                   ))
+                 (helper str 0 0))))
+    (let ((err '(error "expected inner text")))
+      (if (or (< (length input) 2) (not (char-equal (string-to-char input) ?{))) err
+        (emmet-aif (string-find-paired-right-curly-brace input)
+                   `(,input
+                    ,(substring input 1 it)
+                    ,(substring input (+ it 1)))
+                   err)))))
+
 (defun emmet-filter (input filters)
   "Construct AST with specified filters."
   (emmet-pif (emmet-subexpr input)
@@ -3368,12 +3393,23 @@ tbl))
 
 (defun emmet-text (input)
   "A zen coding expression innertext."
-  (emmet-parse "{\\(\\(?:\\\\.\\|[^\\\\}]\\)*?\\)}" 2 "inner text"
-               (let ((txt (emmet-split-numbering-expressions (elt it 1))))
-                 (if (listp txt)
-                     (setq txt (cons (car txt) (cons (replace-regexp-in-string "\\\\\\(.\\)" "\\1" (cadr txt)) (cddr txt))))
-                   (setq txt (replace-regexp-in-string "\\\\\\(.\\)" "\\1" txt)))
-                 `((text ,txt) . ,input))))
+  (emmet-pif (emmet-extract-inner-text input)
+             (let ((txt (emmet-split-numbering-expressions (elt it 1))))
+               (if (listp txt)
+                   (setq txt (cons (car txt) (cons (replace-regexp-in-string "\\\\\\(.\\)" "\\1" (cadr txt)) (cddr txt))))
+                 (setq txt (replace-regexp-in-string "\\\\\\(.\\)" "\\1" txt)))
+               `((text ,txt) . ,(elt it 2)))
+             '(error "expected inner text")))
+
+;; (defun emmet-text (input)
+;;   "A zen coding expression innertext."
+;;   (emmet-parse "{\\(\\(?:\\\\.\\|[^\\\\}]\\|\\\\}\\)*?\\)}" 2 "inner text"
+;;                (let ((txt (emmet-split-numbering-expressions (elt it 1))))
+;;                  (if (listp txt)
+;;                      (setq txt (cons (car txt) (cons (replace-regexp-in-string "\\\\\\(.\\)" "\\1" (cadr txt)) (cddr txt))))
+;;                    (setq txt (replace-regexp-in-string "\\\\\\(.\\)" "\\1" txt)))
+;;                  `((text ,txt) . ,input))
+;;                '(error "expected inner text")))
 
 (defun emmet-properties (input)
   "A bracketed emmet property expression."
