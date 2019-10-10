@@ -51,16 +51,18 @@
 
 (defun emmet-default-filter ()
   "Default filter(s) to be used if none is specified."
-  (let* ((file-ext (car (emmet-regex ".*\\(\\..*\\)" (or (buffer-file-name) "") 1)))
-         (defaults '(".html" ("html")
-                     ".htm"  ("html")
-                     ".haml" ("haml")
-                     ".clj"  ("hic")))
-         (default-else      '("html"))
-         (selected-default (member file-ext defaults)))
-    (if selected-default
-        (cadr selected-default)
-      default-else)))
+  (or emmet-file-filter
+      (let* ((file-ext (car (emmet-regex ".*\\(\\..*\\)" (or (buffer-file-name) "") 1)))
+             (defaults '(".html" ("html")
+                         ".htm"  ("html")
+                         ".haml" ("haml")
+                         ".clj"  ("hic")
+                         ".cljs" ("hic")))
+             (default-else emmet-fallback-filter)
+             (selected-default (member file-ext defaults)))
+        (if selected-default
+            (cadr selected-default)
+          default-else))))
 
 (defun emmet-numbering (input)
   (emmet-parse
