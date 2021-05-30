@@ -2706,9 +2706,6 @@ tbl) tbl)
 tbl) tbl)
 (puthash "form" (let ((tbl (make-hash-table :test 'equal)))
 (puthash "block" t tbl)
-(puthash "defaultAttr" (let ((tbl (make-hash-table :test 'equal)))
-(puthash "action" "" tbl)
-tbl) tbl)
 (puthash "selfClosing" nil tbl)
 tbl) tbl)
 (puthash "frame" (let ((tbl (make-hash-table :test 'equal)))
@@ -3122,6 +3119,7 @@ tbl))
 
 (defun emmet-extract-inner-text (input)
   "Extract inner-text in the form of {inner_text}...
+Right curly braces can be escaped by backslash, i.e. '\\}'
 Return `(,inner-text ,input-without-inner-text) if succeeds, otherwise return
 `(error ,error-message)"
   (cl-labels (

@@ -45,7 +45,7 @@
       "figure":     {"block": true,  "selfClosing": false},
       "font":       {"block": false, "selfClosing": false},
       "footer":     {"block": true,  "selfClosing": false},
-      "form":       {"block": true,  "selfClosing": false, "defaultAttr": {"action": ""}},
+      "form":       {"block": true,  "selfClosing": false},
       "frame":      {"block": false, "selfClosing": true},
       "frameset":   {"block": true,  "selfClosing": false},
       "head":       {"block": true,  "selfClosing": false},
