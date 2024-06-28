@@ -241,6 +241,7 @@ e. g. without semicolons")
 
 (defvar emmet-css-major-modes
   '(css-mode
+    css-ts-mode
     scss-mode
     sass-mode
     less-mode
