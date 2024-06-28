@@ -66,6 +66,13 @@ Or if you don't want to move cursor after expanding:
 
     (setq emmet-move-cursor-after-expanding nil) ;; default t
 
+If you want to customize Auto-quote html - jsx/tsx tag style:
+
+    (setq emmet-html-auto-quote-style 1) ;; default double quote
+
+    ;; only 1 - double quote and 2 - single quote are valid.
+    ;; eg. <a href=""></a>, <a href=''></a>
+
 If you want to customize Self-closing tags style:
 
     (setq emmet-self-closing-tag-style " /") ;; default "/"

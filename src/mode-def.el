@@ -43,6 +43,12 @@
   :type '(number :tag "Spaces")
   :group 'emmet)
 
+(defcustom emmet-html-auto-quote-style 1
+  "Auto-quoting style."
+  :type '(choice (const :tag "Auto-quotes with double quote" 1)
+                 (const :tag "Auto-quotes with single quote" 2))
+  :group 'emmet)
+
 (defcustom emmet-indent-after-insert t
   "Indent region after insert?"
   :type 'boolean

@@ -622,13 +622,14 @@ Return `(,inner-text ,input-without-inner-text) if succeeds, otherwise return
          (funcall fn content)
        (puthash tag-name fn emmet-tag-snippets-table)))
 
-   (let* ((id           (emmet-concat-or-empty " id=\"" tag-id "\""))
+   (let* ((html-auto-quote-style (if (eq emmet-html-auto-quote-style 1) "\"" "'"))
+          (id           (emmet-concat-or-empty (concat " id=" html-auto-quote-style) tag-id html-auto-quote-style))
           (class-attr   (if (emmet-jsx-supported-mode?)
                             (if emmet-jsx-className-braces?
                                 " className={"
-                              " className=\"")
-                          " class=\""))
-	  (class-list-closer (if emmet-jsx-className-braces? "}" "\""))
+                              (concat " className=" html-auto-quote-style))
+                          (concat " class=" html-auto-quote-style)))
+	  (class-list-closer (if emmet-jsx-className-braces? "}" html-auto-quote-style))
 	  (class-list-delimiter (if emmet-jsx-className-braces? "." " "))
           (classes      (emmet-mapconcat-or-empty class-attr tag-classes class-list-delimiter class-list-closer))
           (props        (let* ((tag-props-default
@@ -655,7 +656,7 @@ Return `(,inner-text ,input-without-inner-text) if succeeds, otherwise return
                                      (if (and (emmet-jsx-supported-mode?)
                                               (emmet-jsx-prop-value-var? val))
                                          "%s=%s"
-                                       "%s=\"%s\"")))
+                                       (concat "%s=" html-auto-quote-style "%s" html-auto-quote-style))))
                                (if val (format format-string key val) key))))))
           (content-multiline? (and content (string-match "\n" content)))
           (block-tag?         (and settings (gethash "block" settings)))
